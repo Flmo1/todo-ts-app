@@ -3,14 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest run"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "preview": "vite preview",
+  "test": "vitest run",
+  "test:e2e": "testcafe chrome:headless e2e/clearCompleted.e2e.js --app \"npx vite --host 127.0.0.1 --port 5173 --strictPort\" --app-init-delay 4000 --hostname 127.0.0.1",
+  "test:e2e:remote": "testcafe remote e2e/clearCompleted.e2e.js --app \"npx vite --host 127.0.0.1 --port 5173 --strictPort\" --app-init-delay 4000 --hostname 127.0.0.1"
+},
   "devDependencies": {
     "jsdom": "^29.1.1",
+    "testcafe": "^3.7.7",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^4.1.11"
