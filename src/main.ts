@@ -69,3 +69,11 @@ const removeTodo= (id:number):void => {
    todos = todos.filter(todo => todo.id !== id)
    renderTodos()
 }
+
+const toggleTodo = (id: number): void => {
+  const todo = todos.find(todo => todo.id === id)
+  if (todo) {
+    todo.completed = !todo.completed
+    renderTodos()
+  }
+}
