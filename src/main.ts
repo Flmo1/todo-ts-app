@@ -1,18 +1,13 @@
 import './style.css'
-
-
-//structure of the data schema
-interface Todo {
- id: number;
- text: string;
- completed: boolean;
-}
+import { clearCompleted } from './todoFunctions'
+import type { Todo } from './todoFunctions'
 
 let todos: Todo[] = [];
 
 const todoInput = document.getElementById('todo-input') as HTMLInputElement
 const todoForm = document.querySelector('.todo-form') as HTMLFormElement
 const todoList = document.getElementById('todo-list') as HTMLUListElement
+const clearButton = document.getElementById('clear-completed') as HTMLButtonElement
 
 const errorMessage = document.getElementById('error-message') as HTMLParagraphElement
 
@@ -91,3 +86,8 @@ const toggleTodo = (id: number): void => {
     renderTodos()
   }
 }
+
+clearButton.addEventListener('click', () => {
+  todos = clearCompleted(todos)
+  renderTodos()
+})
