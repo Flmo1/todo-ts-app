@@ -36,11 +36,20 @@ const renderTodos = ():void => {
   todos.forEach(todo => {
     const li = document.createElement('li')
     li.className = 'todo-item'
+
+    let buttonText = 'Done'
+    if (todo.completed) {
+      buttonText = 'Undo'
+      li.classList.add('completed')
+    }
+
     li.innerHTML = `
     <span>${todo.text}</span>
     <button>Remove</button>
+    <button class="toggleBtn">${buttonText}</button>
     `
     addRemoveButtonListener(li, todo.id)
+    addToggleButtonListener(li, todo.id)
     todoList.appendChild(li)
   })
 }
@@ -65,7 +74,20 @@ const addRemoveButtonListener = (li: HTMLLIElement, id:number):void => {
  removeButton?.addEventListener('click', () => removeTodo(id))
 }
 
+const addToggleButtonListener = (li: HTMLLIElement, id: number): void => {
+  const toggleButton = li.querySelector('.toggleBtn')
+  toggleButton?.addEventListener('click', () => toggleTodo(id))
+}
+
 const removeTodo= (id:number):void => {
    todos = todos.filter(todo => todo.id !== id)
    renderTodos()
+}
+
+const toggleTodo = (id: number): void => {
+  const todo = todos.find(todo => todo.id === id)
+  if (todo) {
+    todo.completed = !todo.completed
+    renderTodos()
+  }
 }
