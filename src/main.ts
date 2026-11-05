@@ -1,5 +1,5 @@
 import './style.css'
-import { clearCompleted } from './todoFunctions'
+import { clearCompleted, getProgress } from './todoFunctions'
 import type { Todo, Priority } from './todoFunctions'
 
 let todos: Todo[] = [];
@@ -9,6 +9,8 @@ const todoForm = document.querySelector('.todo-form') as HTMLFormElement
 const todoList = document.getElementById('todo-list') as HTMLUListElement
 const clearButton = document.getElementById('clear-completed') as HTMLButtonElement
 const prioritySelect = document.getElementById('priority-select') as HTMLSelectElement
+const progressBar = document.getElementById('progress-bar') as HTMLProgressElement
+const progressText = document.getElementById('progress-text') as HTMLParagraphElement
 
 const errorMessage = document.getElementById('error-message') as HTMLParagraphElement
 
@@ -21,6 +23,12 @@ const addTodo = (text: string, priority?: Priority): void => {
  }
  todos.push(newTodo)
  renderTodos();
+}
+
+const updateProgress = (): void => {
+  const percent = getProgress(todos)
+  progressBar.value = percent
+  progressText.textContent = `${percent}% done`
 }
 
 const renderTodos = ():void => {
@@ -51,6 +59,8 @@ const renderTodos = ():void => {
     addToggleButtonListener(li, todo.id)
     todoList.appendChild(li)
   })
+
+  updateProgress()
 }
 
 renderTodos();

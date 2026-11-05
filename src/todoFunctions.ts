@@ -10,3 +10,18 @@ export interface Todo {
 export const clearCompleted = (todos: Todo[]): Todo[] => {
   return todos.filter(todo => todo.completed === false)
 }
+
+export const getProgress = (todos: Todo[]): number => {
+  if (todos.length === 0) {
+    return 0
+  }
+
+  let doneCount = 0
+  todos.forEach(todo => {
+    if (todo.completed) {
+      doneCount++
+    }
+  })
+
+  return Math.round((doneCount / todos.length) * 100)
+}
