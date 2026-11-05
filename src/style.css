@@ -113,3 +113,56 @@ h1 {
   border-radius: 3px;
   cursor: pointer;
 }
+
+.todo-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.priority {
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.priority.low {
+  background: #28a745;
+}
+
+.priority.medium {
+  background: #fd7e14;
+}
+
+.priority.high {
+  background: #dc3545;
+}
+
+.todo-form input.input-error {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+.todo-form {
+  gap: 5px;
+}
+
+.todo-form input {
+  min-width: 0;
+}
+
+.todo-form select {
+  padding: 10px 5px;
+}
+
+#progress-bar {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#progress-text {
+  text-align: center;
+  margin: 5px 0 0;
+  font-size: 0.9em;
+}

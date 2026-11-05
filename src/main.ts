@@ -1,6 +1,6 @@
 import './style.css'
-import { clearCompleted } from './todoFunctions'
-import type { Todo } from './todoFunctions'
+import { clearCompleted, getProgress } from './todoFunctions'
+import type { Todo, Priority } from './todoFunctions'
 
 let todos: Todo[] = [];
 
@@ -8,24 +8,30 @@ const todoInput = document.getElementById('todo-input') as HTMLInputElement
 const todoForm = document.querySelector('.todo-form') as HTMLFormElement
 const todoList = document.getElementById('todo-list') as HTMLUListElement
 const clearButton = document.getElementById('clear-completed') as HTMLButtonElement
+const prioritySelect = document.getElementById('priority-select') as HTMLSelectElement
+const progressBar = document.getElementById('progress-bar') as HTMLProgressElement
+const progressText = document.getElementById('progress-text') as HTMLParagraphElement
 
 const errorMessage = document.getElementById('error-message') as HTMLParagraphElement
 
-const addTodo = (text:string):void => {
+const addTodo = (text: string, priority?: Priority): void => {
  const newTodo: Todo = {
-  id: Date.now(), //
+  id: Date.now(),
   text: text,
-  completed: false
+  completed: false,
+  priority: priority
  }
  todos.push(newTodo)
- console.log(`Todo added: ${todos}`)
-
  renderTodos();
+}
 
+const updateProgress = (): void => {
+  const percent = getProgress(todos)
+  progressBar.value = percent
+  progressText.textContent = `${percent}% done`
 }
 
 const renderTodos = ():void => {
-  //clears the current list - test later
   todoList.innerHTML = '';
 
   todos.forEach(todo => {
@@ -38,8 +44,14 @@ const renderTodos = ():void => {
       li.classList.add('completed')
     }
 
+    let priorityHtml = ''
+    if (todo.priority) {
+      priorityHtml = `<small class="priority ${todo.priority}">${todo.priority}</small>`
+    }
+
     li.innerHTML = `
     <span>${todo.text}</span>
+    ${priorityHtml}
     <button>Remove</button>
     <button class="toggleBtn">${buttonText}</button>
     `
@@ -47,6 +59,8 @@ const renderTodos = ():void => {
     addToggleButtonListener(li, todo.id)
     todoList.appendChild(li)
   })
+
+  updateProgress()
 }
 
 renderTodos();
@@ -55,14 +69,23 @@ todoForm.addEventListener('submit', (event: Event) => {
   event.preventDefault();
   const text = todoInput.value.trim()
 
-  if (text !=='') {
-      addTodo(text)
-      todoInput.value = '' //clears the input field after add:
+  if (text !== '') {
+    todoInput.classList.remove('input-error')
+    errorMessage.style.display = 'none'
 
+    let priority: Priority | undefined = undefined
+    if (prioritySelect.value !== '') {
+      priority = prioritySelect.value as Priority
+    }
+
+    addTodo(text, priority)
+    todoInput.value = ''
+    prioritySelect.value = ''
+  } else {
+    todoInput.classList.add('input-error')
+    errorMessage.style.display = 'block'
   }
 })
-
-
 
 const addRemoveButtonListener = (li: HTMLLIElement, id:number):void => {
  const  removeButton = li.querySelector('button');
