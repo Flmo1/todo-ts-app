@@ -28,3 +28,15 @@ describe('addTodo', () => {
         expect(result[0].completed).toBe(false)
     })
 })
+
+describe('removeTodo', () => {
+    it('should remove the todo with the given id', () => {
+        const todos: Todo[] = [
+            { id: 1, text: 'Buy milk', completed: false },
+            { id: 2, text: 'Do homework', completed: false }
+        ]
+        const result = removeTodo(todos, 1)
+        expect(result.length).toBe(1)
+        expect(result[0].text).toBe('Do homework')
+    })
+})
