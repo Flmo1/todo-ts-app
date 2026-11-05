@@ -25,3 +25,15 @@ export const getProgress = (todos: Todo[]): number => {
 
   return Math.round((doneCount / todos.length) * 100)
 }
+
+export const parseTodos = (text: string): Todo[] | null => {
+  try {
+    const data = JSON.parse(text)
+    if (Array.isArray(data)) {
+      return data as Todo[]
+    }
+    return null
+  } catch {
+    return null
+  }
+}

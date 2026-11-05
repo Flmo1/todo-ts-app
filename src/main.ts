@@ -1,5 +1,5 @@
 import './style.css'
-import { clearCompleted, getProgress } from './todoFunctions'
+import { clearCompleted, getProgress, parseTodos } from './todoFunctions'
 import type { Todo, Priority } from './todoFunctions'
 
 let todos: Todo[] = [];
@@ -11,6 +11,10 @@ const clearButton = document.getElementById('clear-completed') as HTMLButtonElem
 const prioritySelect = document.getElementById('priority-select') as HTMLSelectElement
 const progressBar = document.getElementById('progress-bar') as HTMLProgressElement
 const progressText = document.getElementById('progress-text') as HTMLParagraphElement
+const exportButton = document.getElementById('export-button') as HTMLButtonElement
+const importInput = document.getElementById('import-file') as HTMLInputElement
+const pdfButton = document.getElementById('pdf-button') as HTMLButtonElement
+const colorPicker = document.getElementById('colorPicker') as HTMLInputElement
 
 const errorMessage = document.getElementById('error-message') as HTMLParagraphElement
 
@@ -113,4 +117,40 @@ const toggleTodo = (id: number): void => {
 clearButton.addEventListener('click', () => {
   todos = clearCompleted(todos)
   renderTodos()
+})
+
+exportButton.addEventListener('click', () => {
+  const json = JSON.stringify(todos, null, 2)
+
+  // Make a file in the browser's memory, then click a hidden link to download it
+  const file = new Blob([json], { type: 'application/json' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(file)
+  link.download = 'todos.json'
+  link.click()
+})
+
+importInput.addEventListener('change', async () => {
+  const files = importInput.files
+  if (files && files.length > 0) {
+    const text = await files[0].text()
+    const importedTodos = parseTodos(text)
+
+    if (importedTodos === null) {
+      alert('This file does not contain valid todos')
+    } else {
+      todos = importedTodos
+      renderTodos()
+    }
+
+    importInput.value = ''
+  }
+})
+
+pdfButton.addEventListener('click', () => {
+  window.print()
+})
+
+colorPicker.addEventListener('input', () => {
+  document.body.style.backgroundColor = colorPicker.value
 })
