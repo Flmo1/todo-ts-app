@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { clearCompleted, getProgress } from './todoFunctions'
+import { clearCompleted, getProgress, parseTodos } from './todoFunctions'
 import type { Todo } from './todoFunctions'
 
 describe('clearCompleted', () => {
@@ -45,5 +45,23 @@ describe('getProgress', () => {
       { id: 2, text: 'B', completed: true }
     ]
     expect(getProgress(todos)).toBe(100)
+  })
+})
+
+describe('parseTodos', () => {
+  it('turns valid JSON into a list of todos', () => {
+    const text = '[{"id":1,"text":"Buy milk","completed":false,"priority":"low"}]'
+    const result = parseTodos(text)
+    expect(result).not.toBe(null)
+    expect(result?.length).toBe(1)
+    expect(result?.[0].text).toBe('Buy milk')
+  })
+
+  it('returns null for text that is not JSON', () => {
+    expect(parseTodos('hello')).toBe(null)
+  })
+
+  it('returns null when the JSON is not a list', () => {
+    expect(parseTodos('{"text":"Buy milk"}')).toBe(null)
   })
 })
